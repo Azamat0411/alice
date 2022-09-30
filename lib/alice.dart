@@ -7,6 +7,8 @@ class Alice {
   /// by Alice
   final bool? showNotification;
 
+  void Function()? onTap;
+
   dynamic result;
 
   /// Should inspector be opened on device shake (works only with physical
@@ -47,6 +49,7 @@ class Alice {
     AliceCore(
       _navigatorKey,
       result: result,
+      onTap: onTap,
       showNotification: showNotification,
       showInspectorOnShake: showInspectorOnShake,
       darkTheme: darkTheme,
@@ -99,3 +102,4 @@ class Alice {
   //   _aliceCore.addCall(aliceHttpCall);
   // }
 }
+
