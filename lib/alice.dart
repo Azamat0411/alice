@@ -37,6 +37,7 @@ class Alice {
   Alice({
     GlobalKey<NavigatorState>? navigatorKey,
     this.showNotification,
+    this.onTap,
     this.showInspectorOnShake = false,
     this.darkTheme = false,
     this.notificationIcon = "@mipmap/ic_launcher",
