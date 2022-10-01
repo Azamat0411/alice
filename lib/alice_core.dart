@@ -1,33 +1,22 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class AliceCore {
   final bool? showNotification;
 
-  void Function()? onTap;
-
   dynamic result;
 
-  /// Should inspector be opened on device shake (works only with physical
-  /// with sensors)
   final bool showInspectorOnShake;
 
-  /// Should inspector use dark theme
   final bool darkTheme;
 
-  /// Icon url for notification
   final String notificationIcon;
 
-  ///Max number of calls that are stored in memory. When count is reached, FIFO
-  ///method queue will be used to remove elements.
   final int maxCallsCount;
 
-  ///Directionality of app. If null then directionality of context will be used.
   final TextDirection? directionality;
 
-  ///Flag used to show/hide share button
   final bool? showShareButton;
 
   late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
@@ -37,11 +26,9 @@ class AliceCore {
 
   StreamSubscription? _callsSubscription;
 
-  /// Creates alice core instance
   AliceCore(
     this.navigatorKey, {
     this.showNotification,
-    this.onTap,
     required this.showInspectorOnShake,
     required this.darkTheme,
     required this.notificationIcon,
@@ -57,7 +44,6 @@ class AliceCore {
     _brightness = darkTheme ? Brightness.dark : Brightness.light;
   }
 
-  /// Dispose subjects and subscriptions
   void dispose() {
     _callsSubscription?.cancel();
   }
@@ -89,8 +75,10 @@ class AliceCore {
   void navigateToCallListScreen() {
     if (!_isInspectorOpened) {
       _isInspectorOpened = true;
-      onTap;
-      // NavigationPages().pushNamed("/alice", arguments: result);
+      BuildContext? context = navigatorKey?.currentState?.context;
+      if(context != null){
+        Navigator.of(context).pushNamed("/alica", arguments: result);
+      }
     }
   }
 
@@ -127,16 +115,6 @@ class AliceCore {
       message,
       platformChannelSpecifics,
     );
-    // _notificationMessageShown = message;
-    // _notificationProcessing = false;
     return;
   }
 }
-
-// class NavigationService {
-//   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-//
-//   static Future<dynamic> pushNamed(String routeName, arguments) {
-//     return navigatorKey.currentState!.pushNamed(routeName, arguments: arguments);
-//   }
-// }
