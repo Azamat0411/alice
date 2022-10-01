@@ -76,6 +76,7 @@ class AliceCore {
     if (!_isInspectorOpened) {
       _isInspectorOpened = true;
       BuildContext? context = navigatorKey?.currentContext;
+      print("context:"+context.toString());
       if(context != null){
         Navigator.of(context).pushNamed("/alica", arguments: result);
       }
