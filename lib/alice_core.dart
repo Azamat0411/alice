@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:alica/alice_call_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -76,9 +77,10 @@ class AliceCore {
     if (!_isInspectorOpened) {
       _isInspectorOpened = true;
       BuildContext? context = navigatorKey?.currentContext;
-      print("context:"+context.toString());
       if(context != null){
-        Navigator.of(context).pushNamed("/alica", arguments: result);
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context)=>AliceCallDetailsScreen(result: result))
+        );
       }
     }
   }
