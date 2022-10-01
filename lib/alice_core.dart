@@ -75,7 +75,7 @@ class AliceCore {
   void navigateToCallListScreen() {
     if (!_isInspectorOpened) {
       _isInspectorOpened = true;
-      BuildContext? context = navigatorKey?.currentState?.context;
+      BuildContext? context = navigatorKey?.currentContext;
       if(context != null){
         Navigator.of(context).pushNamed("/alica", arguments: result);
       }
