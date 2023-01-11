@@ -85,6 +85,11 @@ class _AliceCallRequestWidget
           }
         case FormData:{
           print('_AliceCallRequestWidget.build FormdData');
+          data.forEach(
+                (field) {
+              rows.add(getListRow("   • ${field.name}:", field.value));
+            },
+          );
           break;
         }
         case Map<String, dynamic>:{
@@ -95,7 +100,7 @@ class _AliceCallRequestWidget
           break;
         }
         default:{
-          print('_AliceCallRequestWidget.build ${data.runtimeType is Map<String, dynamic>}');
+          rows.add(getListRow("Data: ", 'Data is unknown'));
         }
       }
     }else{
