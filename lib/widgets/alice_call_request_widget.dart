@@ -73,6 +73,7 @@ class _AliceCallRequestWidget
     rows.add(getListRow("Data: ", bodyContent));
     if(_result.requestOptions.data != null){
       var data = _result.requestOptions.data;
+      print('_AliceCallRequestWidget.build ${data.runtimeType}');
       switch(data.runtimeType){
         case String:
           {
@@ -91,6 +92,9 @@ class _AliceCallRequestWidget
             rows.add(getListRow("   • $data:", value.toString()));
           });
           break;
+        }
+        default:{
+          print('_AliceCallRequestWidget.build ${data.runtimeType}');
         }
       }
     }
