@@ -70,40 +70,25 @@ class _AliceCallRequestWidget
     });
 
     
-    print('_AliceCallRequestWidget.build}');
-
-    if(_result.requestOptions.data != null){
+    if (_result.requestOptions.data != null) {
       var data = _result.requestOptions.data;
-      print('_AliceCallRequestWidget.build ${data.runtimeType}');
-      switch(data){
-        case String:
-          {
-            print('_AliceCallRequestWidget.build String');
-            data = jsonDecode(data);
-            rows.add(getListRow("   • data:", data));
-            break;
-          }
-        case FormData:{
-          print('_AliceCallRequestWidget.build FormdData');
-          data.forEach(
-                (field) {
-              rows.add(getListRow("   • ${field.name}:", field.value));
-            },
-          );
-          break;
-        }
-        case Map<String, dynamic>:{
-          print('_AliceCallRequestWidget.build Map');
-          data.forEach((data, dynamic value) {
-            rows.add(getListRow("   • $data:", value.toString()));
-          });
-          break;
-        }
-        default:{
-          rows.add(getListRow("Data: ", 'Data is unknown'));
-        }
+      if (data is String) {
+        data = jsonDecode(data);
+        rows.add(getListRow("   • data:", data));
+      } else if (data is Map) {
+        data.forEach((data, dynamic value) {
+          rows.add(getListRow("   • $data:", value.toString()));
+        });
+      } else if (data is FormData) {
+        data.forEach(
+              (field) {
+            rows.add(getListRow("   • ${field.name}:", field.value));
+          },
+        );
+      } else {
+        rows.add(getListRow("Data: ", 'Data is empty'));
       }
-    }else{
+    } else {
       rows.add(getListRow("Data: ", 'Data is empty'));
     }
 
