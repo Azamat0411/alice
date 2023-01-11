@@ -69,8 +69,9 @@ class _AliceCallRequestWidget
       rows.add(getListRow("   • $header:", value.toString()));
     });
 
-    var bodyContent = "Data is empty";
-    rows.add(getListRow("Data: ", bodyContent));
+    
+    print('_AliceCallRequestWidget.build}');
+
     if(_result.requestOptions.data != null){
       var data = _result.requestOptions.data;
       print('_AliceCallRequestWidget.build ${data.runtimeType}');
@@ -86,7 +87,7 @@ class _AliceCallRequestWidget
           print('_AliceCallRequestWidget.build FormdData');
           break;
         }
-        case Map:{
+        case Map<String, dynamic>:{
           print('_AliceCallRequestWidget.build Map');
           data.forEach((data, dynamic value) {
             rows.add(getListRow("   • $data:", value.toString()));
@@ -97,6 +98,8 @@ class _AliceCallRequestWidget
           print('_AliceCallRequestWidget.build ${data.runtimeType}');
         }
       }
+    }else{
+      rows.add(getListRow("Data: ", 'Data is empty'));
     }
 
     final queryParameters = _result.requestOptions.queryParameters;
