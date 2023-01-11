@@ -72,7 +72,7 @@ class _AliceCallRequestWidget
     var bodyContent = "Data is empty";
     rows.add(getListRow("Data: ", bodyContent));
     if(_result.requestOptions.data != null){
-      final data = _result.requestOptions.data;
+      var data = _result.requestOptions.data;
       switch(data.runtimeType){
         case String:
           {
