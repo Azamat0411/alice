@@ -87,7 +87,7 @@ class _AliceCallRequestWidget
           print('_AliceCallRequestWidget.build FormdData');
           break;
         }
-        case Map<String, dynamic>:{
+        case <String, dynamic>{}:{
           print('_AliceCallRequestWidget.build Map');
           data.forEach((data, dynamic value) {
             rows.add(getListRow("   • $data:", value.toString()));
@@ -95,7 +95,7 @@ class _AliceCallRequestWidget
           break;
         }
         default:{
-          print('_AliceCallRequestWidget.build ${data.runtimeType}');
+          print('_AliceCallRequestWidget.build ${data.runtimeType is Map<String, dynamic>}');
         }
       }
     }else{
