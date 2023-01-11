@@ -72,11 +72,27 @@ class _AliceCallRequestWidget
     var bodyContent = "Data is empty";
     rows.add(getListRow("Data: ", bodyContent));
     if(_result.requestOptions.data != null){
-      var data = _result.requestOptions.data;
-      data = data == String?jsonDecode(data):data;
-      data.runtimeType != String?data.forEach((data, dynamic value) {
-        rows.add(getListRow("   • $data:", value.toString()));
-      }):rows.add(getListRow("   • data:", data));
+      final data = _result.requestOptions.data;
+      switch(data.runtimeType){
+        case String:
+          {
+            print('_AliceCallRequestWidget.build String');
+            data = jsonDecode(data);
+            rows.add(getListRow("   • data:", data));
+            break;
+          }
+        case FormData:{
+          print('_AliceCallRequestWidget.build FormdData');
+          break;
+        }
+        case Map:{
+          print('_AliceCallRequestWidget.build Map');
+          data.forEach((data, dynamic value) {
+            rows.add(getListRow("   • $data:", value.toString()));
+          });
+          break;
+        }
+      }
     }
 
     final queryParameters = _result.requestOptions.queryParameters;
