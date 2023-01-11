@@ -80,9 +80,9 @@ class _AliceCallRequestWidget
           rows.add(getListRow("   • $data:", value.toString()));
         });
       } else if (data is FormData) {
-        data.forEach(
+        data.fields.forEach(
               (field) {
-            rows.add(getListRow("   • ${field.name}:", field.value));
+            rows.add(getListRow("   • ${field.key}:", field.value));
           },
         );
       } else {
