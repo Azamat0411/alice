@@ -1,7 +1,9 @@
 import 'dart:async';
-import 'package:alica/alice_call_details_screen.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'alice_call_details_screen.dart';
 
 class AliceCore {
   final bool? showNotification;
@@ -20,10 +22,13 @@ class AliceCore {
 
   final bool? showShareButton;
 
-  late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+  final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   GlobalKey<NavigatorState>? navigatorKey;
   Brightness _brightness = Brightness.light;
   bool _isInspectorOpened = false;
+
+  final StreamController<String?> selectNotificationStream =
+      StreamController<String?>.broadcast();
 
   StreamSubscription? _callsSubscription;
 
@@ -39,7 +44,9 @@ class AliceCore {
     this.showShareButton,
   }) {
     if (showNotification ?? false) {
-      _initializeNotificationsPlugin();
+      _requestPermissions();
+      configureSelectNotificationSubject();
+      initializeNotificationsPlugin();
       _showLocalNotification();
     }
     _brightness = darkTheme ? Brightness.dark : Brightness.light;
@@ -47,40 +54,68 @@ class AliceCore {
 
   void dispose() {
     _callsSubscription?.cancel();
+    selectNotificationStream.close();
   }
 
   Brightness get brightness => _brightness;
 
-  void _initializeNotificationsPlugin() {
-    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    final initializationSettingsAndroid =
-        AndroidInitializationSettings(notificationIcon);
+  void initializeNotificationsPlugin() {
+    const initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const initializationSettingsIOS = IOSInitializationSettings();
+    final DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+      onDidReceiveLocalNotification:
+          (int id, String? title, String? body, String? payload) async {},
+      notificationCategories: [],
+    );
+
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
+      iOS: initializationSettingsDarwin,
     );
     _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification: _onSelectedNotification,
+      onDidReceiveNotificationResponse: (response) {
+        selectNotificationStream.add(response.payload);
+      },
     );
   }
 
-  Future<void> _onSelectedNotification(String? payload) async {
-    assert(payload != null, "payload can't be null");
-    navigateToCallListScreen();
-    return;
+  Future<void> _requestPermissions() async {
+    if (Platform.isIOS) {
+      await _flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+    } else if (Platform.isAndroid) {
+      _flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestPermission();
+    }
+  }
+
+  void configureSelectNotificationSubject() {
+    selectNotificationStream.stream.listen((String? payload) async {
+      navigateToCallListScreen();
+    });
   }
 
   void navigateToCallListScreen() {
     if (!_isInspectorOpened) {
       _isInspectorOpened = true;
       BuildContext? context = navigatorKey?.currentContext;
-      if(context != null){
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context)=>AliceCallDetailsScreen(result: result))
-        );
+      if (context != null) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => AliceCallDetailsScreen(result: result)));
       }
     }
   }
@@ -93,31 +128,19 @@ class AliceCore {
     return notificationMessageString;
   }
 
-  Future _showLocalNotification() async {
+  Future<void> _showLocalNotification() async {
     const channelId = "Alice";
     const channelName = "Alice";
     const channelDescription = "Alice";
-    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      channelId,
-      channelName,
-      channelDescription: channelDescription,
-      enableVibration: true,
-      playSound: true,
-      largeIcon: DrawableResourceAndroidBitmap(notificationIcon),
-    );
-    const iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(presentSound: false);
-    final platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
-    );
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(channelId, channelName,
+            channelDescription: channelDescription);
+
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
     final String? message = _getNotificationMessage();
     await _flutterLocalNotificationsPlugin.show(
-      0,
-      "",
-      message,
-      platformChannelSpecifics,
-    );
-    return;
+        0, "", message, notificationDetails);
   }
 }
