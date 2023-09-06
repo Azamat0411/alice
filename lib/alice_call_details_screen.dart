@@ -34,6 +34,7 @@ class _AliceCallDetailsScreenState extends alica_call_details_screen.State<Alice
       length: 4,
       child: alica_call_details_screen.Scaffold(
         appBar: alica_call_details_screen.AppBar(
+          backgroundColor: Colors.blue,
           leading: alica_call_details_screen.IconButton(
             onPressed: (){
               alica_call_details_screen.Navigator.of(context).pop();
