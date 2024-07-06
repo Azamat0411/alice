@@ -141,6 +141,6 @@ class AliceCore {
         NotificationDetails(android: androidNotificationDetails);
     final String? message = _getNotificationMessage();
     await _flutterLocalNotificationsPlugin.show(
-        0, "", message, notificationDetails);
+        message.hashCode, "", message, notificationDetails);
   }
 }
