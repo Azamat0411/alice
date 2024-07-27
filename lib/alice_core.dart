@@ -136,11 +136,11 @@ class AliceCore {
     String channelName = "Alice ${message.hashCode}";
     String channelDescription = "Alice ${message.hashCode}";
 
-    const AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(channelId, channelName,
             channelDescription: channelDescription);
 
-    const NotificationDetails notificationDetails =
+    NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     
     await _flutterLocalNotificationsPlugin.show(
