@@ -129,9 +129,9 @@ class AliceCore {
   }
 
   Future<void> _showLocalNotification() async {
-    const channelId = "Alice";
-    const channelName = "Alice";
-    const channelDescription = "Alice";
+    const channelId = "Alice ${message.hashCode}";
+    const channelName = "Alice ${message.hashCode}";
+    const channelDescription = "Alice ${message.hashCode}";
 
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(channelId, channelName,
