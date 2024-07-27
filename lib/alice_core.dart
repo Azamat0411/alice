@@ -129,6 +129,9 @@ class AliceCore {
   }
 
   Future<void> _showLocalNotification() async {
+
+    final String? message = _getNotificationMessage();
+    
     const channelId = "Alice ${message.hashCode}";
     const channelName = "Alice ${message.hashCode}";
     const channelDescription = "Alice ${message.hashCode}";
@@ -139,7 +142,7 @@ class AliceCore {
 
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    final String? message = _getNotificationMessage();
+    
     await _flutterLocalNotificationsPlugin.show(
         message.hashCode, "", message, notificationDetails);
   }
