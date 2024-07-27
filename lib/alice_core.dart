@@ -132,9 +132,9 @@ class AliceCore {
 
     final String? message = _getNotificationMessage();
     
-    const channelId = "Alice ${message.hashCode}";
-    const channelName = "Alice ${message.hashCode}";
-    const channelDescription = "Alice ${message.hashCode}";
+    String channelId = "Alice ${message.hashCode}";
+    String channelName = "Alice ${message.hashCode}";
+    String channelDescription = "Alice ${message.hashCode}";
 
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(channelId, channelName,
