@@ -23,8 +23,8 @@ class _AliceCallOverviewWidget
     rows.add(getListRow("Method: ", _result.requestOptions.method));
     rows.add(getListRow("Server: ", _result.requestOptions.baseUrl));
     rows.add(getListRow("Endpoint: ", _result.realUri.path));
-    rows.add(getListRow("Bytes send:", (_result.headers.toString().length*4/1000).toString()+' kB'));
-    rows.add(getListRow("Bytes received:", (_result.data.toString().length*4/1000).toString()+' kB'));
+    rows.add(getListRow("Bytes send:", '${_result.requestOptions.headers.toString().length*4/1000} kB'));
+    rows.add(getListRow("Bytes received:", '${_result.data.toString().length*4/1000} kB'));
     return Container(
       padding: const EdgeInsets.all(6),
       child: ListView(children: rows),
