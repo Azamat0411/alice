@@ -27,7 +27,6 @@ class AliceCore {
   final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   GlobalKey<NavigatorState>? navigatorKey;
   Brightness _brightness = Brightness.light;
-  bool _isInspectorOpened = false;
 
   final StreamController<String?> selectNotificationStream =
       StreamController<String?>.broadcast();
@@ -65,20 +64,18 @@ class AliceCore {
     const initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    final DarwinInitializationSettings initializationSettingsDarwin =
+    const DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
-      onDidReceiveLocalNotification:
-          (int id, String? title, String? body, String? payload) async {},
-      notificationCategories: [],
     );
 
-    final initializationSettings = InitializationSettings(
+    const initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin,
     );
+
     _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (response) {
@@ -101,7 +98,7 @@ class AliceCore {
       _flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestPermission();
+          ?.requestNotificationsPermission();
     }
   }
 
